@@ -12,6 +12,13 @@ var parallax = require('parallax')
 <div data-scroll="parallax" />
 ```
 
+## Features
+
+* uses css animations to take advantage of the GPU and avoid the dubstep effect
+
+* no external library dependencies
+
+
 ## License
 
 
