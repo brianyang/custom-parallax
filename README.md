@@ -1,6 +1,6 @@
 # Something Parallax
 
-Another parallax implementation that allows you to set the preceding and proceeding elements at varying speeds.
+Another parallax implementation that allows you to set the preceding and proceeding elements to scroll at varying speeds.
 
 ## Usage
 

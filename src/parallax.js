@@ -1,5 +1,5 @@
 /*************************************************************************
- * comments will be removed when this script is ready for testing
+ * specify the rate at which precending and proceeding elements scroll
  *
  *************************************************************************
  *
@@ -11,68 +11,92 @@
  *
  *************************************************************************/
 
-(function(){
-
-    if ($('body').hasClass('edit-mode')) {
-        return;
-    }
+Parallax = (function(){
 
     'use strict'
 
-    var elems, elem, config, device, mobileUA, ratio, stopBtm, ratio2
-
-    elem = document.querySelectorAll('[data-parallax="scroll"]')
-
-    mobileUA = navigator.userAgent.match(/(iPod|iPhone|iPad)/) || navigator.userAgent.match(/(Android)/)
-    mobileUA ? device = 'mobile' : device = 'desktop'
-
-    config = {
-        peakTop: 100
-      , stopBtm: 300
-    }
-
-    elem.length && device == 'desktop' ? startParallax() : null
-
-    if (device == 'mobile') elem[0].parentElement.classList.add('mobile')
-
-    function startParallax () {
-
-        var cta = elem[0].nextElementSibling
-        , ctaTop = cta.getBoundingClientRect().top
-
-
-        // determine configured speed and top position of elem
-        var percentage = elem[0].dataset.speed
-            , rectTop = elem[0].getBoundingClientRect().top
-
-        window.addEventListener('scroll', function() {
-            // position at top of window when scrolled
-            var scrollTop = window.pageYOffset
-                , windowHeight = window.outerHeight
-            // position at bottom of window when scrolled
-                , scrollBtm = scrollTop + windowHeight
-                , el = elem[0].previousElementSibling
-                , cta = elem[0].nextElementSibling
-
-            if (scrollBtm > ctaTop) {
-                ratio2 = (scrollBtm - ctaTop) * (.2)
-                cta.style.transform = 'translateY(-'+ ratio2  +'px)'
+    var parallax = {
+        invoke: function() {
+            if ($('body').hasClass('edit-mode')) {
+                return
             }
+            if (!this.detectMobile()) {
+                this.startParallax()
+            }
+            return this.defineSelector()
+        }
 
-            // bottom of scroll is greater than the value of element
-            if (scrollBtm + config.peakTop > rectTop) {
-                el.style.marginTop = '-' + config.peakTop + 'px'
-                // determine position and implement speed of effect
-                ratio = (scrollBtm - rectTop) * (1 - percentage)
+        , defineSelector: function() {
+            var elems = document.querySelectorAll('[data-parallax="scroll"]')
+            return elems
+        }
 
-                // stop motion when leaving
-                if (ratio < config.stopBtm) {
-                    el.style.transform = 'translateY('+ ratio  +'px)'
+        , calculateDimensions: function() {
+            this.dimensions = {
+                percentage: this.defineSelector()[0].dataset.speed
+                , percentage2: '0.2'
+                , rectTop: this.defineSelector()[0].getBoundingClientRect().top
+                , ctaTop: this.defineSelector()[0].nextElementSibling.getBoundingClientRect().top
+            }
+            return this.dimensions
+        }
+
+        , setDefaultStartStop: function(cfg) {
+            if (!cfg) {
+                this.config = {
+                    peakTop: 100
+                    , stopBtm: 300
+                }
+            }
+            if (cfg) this.config.peakTop = cfg.top
+            if (cfg) this.config.stopBtm = cfg.btm
+            return this.config
+        }
+
+        , detectMobile: function() {
+            this.mobile = navigator.userAgent.match(/(iPod|iPhone|iPad)/) || navigator.userAgent.match(/(Android)/)
+            return this.mobile
+        }
+
+        , scrollHandler: function() {
+            this.scrollTop = window.pageYOffset
+            this.windowHeight = window.outerHeight
+            this.scrollBtm = this.scrollTop + this.windowHeight
+            this.el = this.defineSelector()[0].previousElementSibling
+            this.cta = this.defineSelector()[0].nextElementSibling
+
+            if (this.scrollBtm + this.setDefaultStartStop().peakTop > this.rectTop) {
+                this.el.style.marginTop = '-' + this.setDefaultStartStop().peakTop + 'px'
+                this.ratio = (this.scrollBtm - this.rectTop) * (1 - this.percentage)
+                if (this.ratio < this.setDefaultStartStop().stopBtm) {
+                    this.el.style.transform = 'translateY('+ this.ratio  +'px)'
                 }
             }
 
-        })
+            if (this.scrollBtm > this.ctaTop) {
+                this.ratio2 = (this.scrollBtm - this.ctaTop) * (.2)
+                this.cta.style.transform = 'translateY(-'+ this.ratio2  +'px)'
+            }
 
+            return this
+        }
+
+        , startParallax: function() {
+            this.percentage = this.calculateDimensions().percentage
+            this.percentage2 = this.calculateDimensions().percentage2
+            this.rectTop = this.calculateDimensions().rectTop
+            this.ctaTop = this.calculateDimensions().ctaTop
+            window.addEventListener('scroll', this.scrollHandler.bind(this))
+            return this
+        }
+    }
+
+    if (document.querySelectorAll('[data-parallax="scroll"]').length) parallax.invoke()
+
+
+
+    return {
+        parallax
     }
 
 })();
