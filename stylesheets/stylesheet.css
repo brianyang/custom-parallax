@@ -964,3 +964,14 @@ footer .owner p a {
 .highlight .vg { color: #008080 } /* Name.Variable.Global */
 .highlight .vi { color: #008080 } /* Name.Variable.Instance */
 .highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+
+.wrapper {
+    height: 3000px;
+}
+.wrap > .component {
+    background: #bbb;
+    margin: 10px;
+}
+.wrap > .cta {
+    background: #f00;
+}
