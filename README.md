@@ -2,8 +2,9 @@
 
 Another parallax implementation that allows you to set the preceding and proceeding elements to scroll at varying speeds.
 
-[read code guide](https://github.com/brianyang/custom-parallax/blob/master/parallax.js.md)
-[view demo](https://brianyang.github.io/custom-parallax/)
+* [read code guide](https://github.com/brianyang/custom-parallax/blob/master/parallax.js.md)
+* [view demo](https://brianyang.github.io/custom-parallax/)
+
 ## Usage
 
 ```js
