@@ -1,4 +1,4 @@
-# Something Parallax
+# Custom Parallax Implementation
 
 Another parallax implementation that allows you to set the preceding and proceeding elements to scroll at varying speeds.
 
