@@ -3,7 +3,6 @@
         // ## `invoke`
         // When the user is in author mode or on a mobile device, this feature will be disabled.
         invoke: function() {
-            console.log('foo')
             if (!this.detectMobile()) {
                 this.startParallax(this.defineSelector().length)
             }
